@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"</script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+        <!--웹사이트 타이틀-->
+        <title>쿠동구매[상품 구매 등록]</title>
+
+        <style>
+            /*전체 구역 스타일*/
+            *{
+                padding: 0;
+                margin: auto;
+                border: none;
+            }
+
+            /*body 구역 스타일*/
+            body{
+                font-size: 14px;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            /*상품 구매 등록 폼 스타일*/
+            .product_registration_wrapper{
+                width: 400px;
+                height: 350px;
+                padding: 40px;
+                box-sizing: border-box;
+            }
+
+            /*상품 구매 등록 폼 h2태그 스타일*/
+            .product_registration_wrapper > h2{
+                font-size: 24px;
+                color: #6A24FE;
+                margin-bottom: 20px;
+            }
+
+            /*회원가입 폼 button태그 스타일*/
+            .userinfo_wrapper > button[type="button"]{
+                color: #fff;
+                font-size: 16px;
+                background-color: #6A24FE;
+                width: 320px;
+                height: 48px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+            }
+        </style>
+
+        <script>
+            //로그아웃 기능
+            function logout() {
+                $.removeCookie('mytoken');
+                alert('로그아웃 완료!')   
+                window.location.href = '/'
+            }
+        
+            //로그인한 사용자 정보 확인 기능
+            function showuserinfo() {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/isAuth",
+                    data: {},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            // 로그인한 사용자면 닉네임을 보여주는 알람을 띄움!
+                            let userph = response['userph']
+                            alert(`사용자 정보 : ${userph}`)
+                        } else {
+                            alert(response['msg'])
+                            window.location.href = '/'
+                        }
+                    }
+                })
+            }
+        </script>
+    </head>
+
+    <body>
+        <!--상품 구매 등록 페이지 폼-->
+        <div class="product_registration_wrapper">
+            <h2>상품 구매 등록</h2>
+            <form class="product_registration_form">
+                <div class="userinfo_wrapper">
+                    <button id="USERINFO_BTN" class="userinfo_btn" type="button" onclick="showuserinfo()">사용자 정보</button>
+                    <button id="LOGOUT_BTN" class="logout_btn" type="button" onclick="logout()">로그아웃</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

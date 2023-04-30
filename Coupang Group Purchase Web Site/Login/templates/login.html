@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"</script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        
+        <!--웹사이트 타이틀-->
+        <title>쿠동구매[로그인]</title>
+        
+        <style>
+            /*전체 구역 스타일*/
+            *{
+                padding: 0;
+                margin: auto;
+                border: none;
+            }
+
+            /*body 구역 스타일*/
+            body{
+                font-size: 14px;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            /*로그인 폼 스타일*/
+            .login_wrapper{
+                width: 400px;
+                height: 350px;
+                padding: 40px;
+                box-sizing: border-box;
+            }
+        
+            /*로그인 폼 h2태그 스타일*/
+            .login_wrapper > h2{
+                font-size: 24px;
+                color: #6A24FE;
+                margin-bottom: 20px;
+            }
+
+            /*로그인 폼 input태그 스타일*/
+            .login_form > input{
+                width: 100%;
+                height: 48px;
+                padding: 0 10px;
+                box-sizing: border-box;
+                margin-bottom: 16px;
+                border-radius: 6px;
+                background-color: #F8F8F8;
+            }
+
+            /*로그인 폼 button태그 스타일*/
+            .login_form > button[type="button"]{
+                color: #fff;
+                font-size: 16px;
+                background-color: #6A24FE;
+                width: 320px;
+                height: 48px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+                display: block;
+            }
+
+            /*로그인 폼 input태그 placeholder 스타일*/
+            .login_form > input::placeholder{
+                color: #D2D2D2;
+            }
+        </style>
+        
+        <script>
+            //회원가입 페이지 이동
+            function go_signup() {
+                window.location.href = '/signup'
+            }
+
+            //로그인 기능
+            function login() {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/login",
+                    data: {
+                    ph_give: $('#LOGIN_PH').val(),
+                    pw_give: $('#LOGIN_PW').val(),
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if (response['result'] == 'success') {
+                            // 로그인 성공 시, token을 쿠키에 저장
+                            $.cookie('mytoken', response['token']);
+                            alert('로그인 완료!')
+                            window.location.href = '/main'
+                        } else {
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+        </script>
+    </head>
+
+    <body>
+        <!--로그인 페이지 폼-->
+        <div class="login_wrapper">
+            <h2>로그인</h2>
+            <form class="login_form">
+                <input id="LOGIN_PH" class="ph_text" type="text" placeholder="전화번호">
+                <input id="LOGIN_PW" class="pw_text" type="password" placeholder="비밀번호">
+                <button id="LOGIN_BTN" class="login_btn" type="button" onclick="login()">로그인</button>
+                <button id="SIGNUP_BTN" class="signup_btn" type="button" onclick="go_signup()">회원가입</button>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,257 @@
+<!Doctype html>
+<html lang="ko">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">			  <!-- JS -->
+        
+        <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+            
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+        
+        <title>SW사관학교 정글 | 나홀로 메모장 ver2.0</title>
+
+        <!-- style -->
+        <style>
+            * {
+                font-family: 'Gowun Dodum', sans-serif;
+            }
+    
+            .wrap {
+    
+                max-width: 700px;
+                width: 95%;
+    
+                margin: 20px auto 0px auto;
+                box-shadow: 0px 0px 3px 0px gray;
+                padding: 20px;
+    
+            }
+    
+            .mytitle {
+                /* background-color: green; */
+                width: 200px;
+                height: 100px;
+    
+                margin: auto;
+                text-align: center;
+    
+    
+    
+            }
+    
+            .mylink {
+                /* background-color: green; */
+                margin-top: 10px;
+                height: 300px;
+            }
+    
+            .mylink_box {
+                /* background-color: red; */
+                padding: 10px;
+    
+            }
+    
+            .mylink_box>button {
+                margin-left: 50px;
+            }
+    
+            .card-title {
+                text-align: center;
+                border: solid 1px black;
+            }
+    
+            .card-price {
+                text-align: center;
+                border: solid 1px black;
+            }
+    
+            .card-link {
+                text-align: center;
+                border: solid 1px black;
+            }
+    
+            .buy-info {
+                text-align: center;
+                border: solid 1px black;
+            }
+    
+            .apply1-info {
+                text-align: center;
+                border: solid 1px red;
+            }
+    
+            .apply2-info {
+                text-align: center;
+                border: solid 1px red;
+            }
+    
+            .mybtn {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+    
+                margin-top: 10px;
+            }
+    
+            .mybtn>button {
+                margin-right: 10px;
+            }
+    
+            .logout {
+                /* background-color: green; */
+                width: 100px;
+    
+            }
+    
+            .col {
+                margin-top: 50px;
+            }
+    
+            .btnsubmit {
+                /* background-color: green; */
+                display: flex;
+                flex-direction: row;
+                justify-content: right;
+                align-items: center;
+    
+                margin-top: 10px;
+            }
+    
+            .container {
+                background-color: green;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $("#cards-box").html("");
+                showMemos();
+            });
+
+            function postMemo() {
+                let myUrl = $("#post-url").val();
+                let myPh = $("#post-phone").val();
+                let myKa = $("#post-kakao").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/memo",
+                    data: {'url_give':myUrl, 'phone_give':myPh, 'kakao_give':myKa},
+                    success: function (response) { 
+                        if (response["result"] == "success") {
+                            alert("포스팅 성공!");
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+
+            
+            function showMemos() {
+                $.ajax({
+                    type: "GET",
+                    url: "/memo",
+                    data: {},
+                    success: function (response) {
+                        alert('넘겨주기 성공');
+                        let coupang=response["coupang"];
+
+                        for(let i = 0; i<coupang.length; i ++  ){
+                            makeCard(coupang[i]['myimg'], coupang[i]['mytitle'], coupang[i]['myprice'], coupang[i]['myphone'], coupang[i]['mykakao'], coupang[i]['myurl'])
+
+
+                        }
+
+                    }
+                })
+            }
+            
+
+            function makeCard(img, title, price, phone, kakao, url) {
+                let card=
+
+                `<div id='${phone}' class="col">
+                    <div class="card">
+                        <img src="${img}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">${title}</h5>
+                            <h5 class="card-price">${price}</h5>
+                            <a href="${url}">상품</a>
+                            <a href="${kakao}">오픈카톡</a>
+                            
+                        </div>
+                    </div>
+                    <div class="mybtn">
+                        <button onclick="deleteMemo('${phone}')" type="button" class="btn btn-danger">삭제</button>
+                    </div>
+                </div>`
+
+                $('#card-list').append(card)
+
+            }
+
+            function deleteMemo(phone){
+                $.ajax({
+                    type: "POST",
+                    url: "/delete",
+                    data: {'phone_give': phone},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('삭제 완료!')
+                            window.location.reload()
+                        }
+                    }
+                });
+            }
+
+        </script>
+
+    </head>
+
+    <body>
+        <div class="wrap">
+            <div class="mytitle">
+                <h1>쿠동구매</h1>
+            </div>
+            <div class="mylink">
+                <div class="mylink_box">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" style="margin-bottom:18px" id="post-url" placeholder="상품 주소를 입력하세요">
+                        <div class="form-group">
+                            <input id="post-phone" class="form-control" placeholder="폰번호을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <input id="post-kakao" class="form-control" placeholder="오픈카톡 주소를 입력하세요">
+                        </div>
+                        <div class="btnsubmit">
+                            <button onclick="postMemo()">등록</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- 여기부터 카드 -->
+    
+            <div id="card-list" class="row row-cols-1 row-cols-md-1 g-4">
+                
+                
+            </div>
+        </div>
+    
+    </body>
+
+</html>

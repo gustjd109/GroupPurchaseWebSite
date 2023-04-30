@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"</script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+
+        <!--웹사이트 타이틀-->
+        <title>쿠동구매[회원가입]</title>
+
+        <style>
+            /*전체 구역 스타일*/
+            *{
+                padding: 0;
+                margin: auto;
+                border: none;
+            }
+
+            /*body 구역 스타일*/
+            body{
+                font-size: 14px;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            /*회원가입 폼 스타일*/
+            .signup_wrapper{
+                width: 400px;
+                height: 350px;
+                padding: 40px;
+                box-sizing: border-box;
+            }
+        
+            /*회원가입 폼 h2태그 스타일*/
+            .signup_wrapper > h2{
+                font-size: 24px;
+                color: #6A24FE;
+                margin-bottom: 20px;
+            }
+
+            /*회원가입 폼 input태그 스타일*/
+            .signup_form > input{
+                width: 100%;
+                height: 48px;
+                padding: 0 10px;
+                box-sizing: border-box;
+                margin-bottom: 16px;
+                border-radius: 6px;
+                background-color: #F8F8F8;
+            }
+
+            /*회원가입 폼 button태그 스타일*/
+            .signup_form > button[type="button"]{
+                color: #fff;
+                font-size: 16px;
+                background-color: #6A24FE;
+                width: 320px;
+                height: 48px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+                display: block;
+            }
+
+            /*회원가입 폼 input태그 placeholder 스타일*/
+            .signup_form > input::placeholder{
+                color: #D2D2D2;
+            }
+        </style>
+
+        <script>
+            //회원가입 기능
+            function signup() {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/signup",
+                    data: {
+                        ph_give: $('#SIGNUP_PH').val(),
+                        pw_give: $('#SIGNUP_PW').val(),
+                        nm_give: $('#SIGNUP_UN').val()
+                    },
+                    success: function (response) {
+                       if (response['result'] == 'success') {
+                            alert('회원가입 완료!')
+                            window.location.href = '/'
+                        } else {
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+
+            //로그인 페이지 이동
+            function go_login() {
+                window.location.href = '/'
+            }
+        </script>
+    </head>
+
+    <body>
+        <!--회원가입 페이지 폼-->
+        <div class="signup_wrapper">
+            <h2>회원가입</h2>
+            <form class="signup_form">
+                <input id="SIGNUP_PH" class="ph_text" type="text" placeholder="전화번호">
+                <input id="SIGNUP_PW" class="pw_text" type="password" placeholder="비밀번호">
+                <input id="SIGNUP_UN" class="name_text" type="text" placeholder="이름">
+                <button id="OK_BTN" class="ok_btn" type="button" onclick="signup()">가입</button>
+                <button id="CANCEL_BTN" class="cancel_btn" type="button" onclick="go_login()">취소</button>
+            </form>
+        </div>
+    </body>
+</html>
